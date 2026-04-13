@@ -109,10 +109,6 @@ export default function HeroScroll() {
   useEffect(() => {
     if (!loaded || !sectionRef.current || !containerRef.current) return;
 
-    // Force scroll to top on load so animation starts at frame 0
-    window.scrollTo(0, 0);
-    drawFrame(0);
-
     const phraseEls =
       sectionRef.current.querySelectorAll<HTMLElement>(".scroll-phrase");
     const heroContent = heroContentRef.current;
