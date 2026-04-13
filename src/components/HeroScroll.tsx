@@ -4,17 +4,17 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const EXPLODE_FRAMES = 151;
-const FLOAT_FRAMES = 151;
+const EXPLODE_FRAMES = 76;
+const FLOAT_FRAMES = 76;
 const TOTAL_FRAMES = EXPLODE_FRAMES + FLOAT_FRAMES - 1;
 
 const explodePaths = Array.from(
   { length: EXPLODE_FRAMES },
-  (_, i) => `/frames/frame-${String(i + 1).padStart(4, "0")}.jpg`
+  (_, i) => `/frames-webp/frame-${String(i + 1).padStart(4, "0")}.webp`
 );
 const floatPaths = Array.from(
   { length: FLOAT_FRAMES },
-  (_, i) => `/frames-float/frame-${String(i + 1).padStart(4, "0")}.jpg`
+  (_, i) => `/frames-float-webp/frame-${String(i + 1).padStart(4, "0")}.webp`
 );
 
 const allPaths = [...explodePaths, ...floatPaths.slice(1)];
