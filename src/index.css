@@ -68,6 +68,14 @@ body {
   overflow-x: hidden;
 }
 
+/* Mobile breathing room — all sections after the hero */
+@media (max-width: 767px) {
+  .liquid-glass-world section > div[class*="max-w-"] {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+}
+
 ::selection {
   background-color: var(--color-simian);
   color: white;
@@ -643,14 +651,17 @@ body {
 
 .partners-section {
   background: transparent;
+  position: relative;
 }
 
+/* Rich gradient mesh behind the glass — gives backdrop-filter something to refract */
 .partners-backdrop {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 10% 40%, rgba(27, 156, 133, 0.1) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 40% at 90% 60%, rgba(139, 92, 246, 0.07) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(27, 156, 133, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 40%, rgba(139, 92, 246, 0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 80%, rgba(27, 156, 133, 0.10) 0%, transparent 50%);
   pointer-events: none;
 }
 
@@ -658,113 +669,171 @@ body {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
-  filter: blur(80px);
+  filter: blur(70px);
 }
 
 .partners-backdrop-orb--1 {
-  width: clamp(180px, 55vw, 450px);
-  height: clamp(180px, 55vw, 450px);
-  top: 15%;
-  left: -8%;
-  background: rgba(27, 156, 133, 0.12);
+  width: clamp(220px, 60vw, 550px);
+  height: clamp(220px, 60vw, 550px);
+  top: 10%;
+  left: -5%;
+  background: rgba(27, 156, 133, 0.2);
   animation: float 9s ease-in-out infinite;
 }
 
 .partners-backdrop-orb--2 {
-  width: clamp(150px, 45vw, 350px);
-  height: clamp(150px, 45vw, 350px);
-  bottom: 10%;
-  right: -5%;
-  background: rgba(139, 92, 246, 0.08);
+  width: clamp(180px, 50vw, 450px);
+  height: clamp(180px, 50vw, 450px);
+  bottom: 5%;
+  right: -3%;
+  background: rgba(139, 92, 246, 0.15);
   animation: float 11s ease-in-out infinite reverse;
 }
 
-/* Partners glass logo strip */
+/* Partners glass logo strip — true translucent glass */
 .partners-glass-strip {
   position: relative;
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
-  -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(24px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.05);
   border-radius: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow:
-    0 8px 40px rgba(0, 0, 0, 0.05),
+    0 8px 40px rgba(0, 0, 0, 0.06),
     0 1.5px 6px rgba(0, 0, 0, 0.03),
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.8),
-    inset 0 -0.5px 0 rgba(255, 255, 255, 0.2),
-    inset 0 0 24px rgba(255, 255, 255, 0.12);
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -0.5px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 24px rgba(255, 255, 255, 0.08);
   overflow: hidden;
   isolation: isolate;
+  padding: clamp(1rem, 2.5vw, 2rem) 0;
 }
 
-/* Each logo cell — glass pill */
+/* Fade edges — translucent to match the glass, not opaque white */
+.partners-carousel-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(50px, 10vw, 120px);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.partners-carousel-fade--left {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    rgba(250, 250, 247, 0.85) 0%,
+    rgba(250, 250, 247, 0.4) 40%,
+    transparent 100%
+  );
+}
+
+.partners-carousel-fade--right {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    rgba(250, 250, 247, 0.85) 0%,
+    rgba(250, 250, 247, 0.4) 40%,
+    transparent 100%
+  );
+}
+
+/* Infinite scrolling track */
+.partners-carousel-track {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  width: max-content;
+  animation: partners-scroll 45s linear infinite;
+}
+
+.partners-carousel-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes partners-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Each logo cell — frosted glass pill */
 .partner-logo-cell {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  gap: 0.75rem;
+  padding: 1.25rem 2rem;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   box-shadow:
-    0 2px 12px rgba(0, 0, 0, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    inset 0 -0.5px 0 rgba(255, 255, 255, 0.15);
+    0 4px 16px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -0.5px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  min-width: 0;
-  flex: 1 1 0;
+  flex-shrink: 0;
   cursor: default;
 }
 
 @media (min-width: 768px) {
   .partner-logo-cell {
-    padding: 1.25rem 1.75rem;
-    flex: 0 0 auto;
-    min-width: 150px;
+    padding: 1.75rem 2.5rem;
   }
 }
 
 .partner-logo-cell:hover {
-  background: rgba(255, 255, 255, 0.4);
-  border-color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.45);
   transform: translateY(-3px);
   box-shadow:
-    0 12px 32px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    inset 0 -0.5px 0 rgba(255, 255, 255, 0.25);
+    0 12px 32px rgba(0, 0, 0, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -0.5px 0 rgba(255, 255, 255, 0.15);
 }
 
-/* Logo image */
+/* Logo image — bigger */
 .partner-logo-img {
-  height: 2rem;
+  height: 3.5rem;
   width: auto;
-  max-width: 80px;
+  max-width: 140px;
   object-fit: contain;
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (min-width: 768px) {
   .partner-logo-img {
-    height: 3rem;
-    max-width: 130px;
+    height: 5rem;
+    max-width: 200px;
   }
 }
 
 .partner-logo-cell:hover .partner-logo-img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 /* Label under each logo */
 .partner-logo-label {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-muted);
   transition: color 0.4s ease;
+}
+
+@media (min-width: 768px) {
+  .partner-logo-label {
+    font-size: 0.75rem;
+  }
 }
 
 .partner-logo-cell:hover .partner-logo-label {

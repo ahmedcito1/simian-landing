@@ -5,10 +5,16 @@ const partners = [
   { name: "Diagnosit", logo: "/partners/diagnosit.png", invert: false },
   { name: "WAVS", logo: "/partners/wavs.webp", invert: false },
   { name: "ETC Podcast", logo: "/partners/etc.jpg", invert: false, rounded: true },
+  { name: "Aquadental", logo: "/partners/aquadental.png", invert: false },
+  { name: "NotBoring", logo: "/partners/notboring.svg", invert: false },
+  { name: "Specialized Practice", logo: "/partners/specialized-practice.png", invert: false },
 ];
 
 export default function Partners() {
   const [videoActive, setVideoActive] = useState(false);
+
+  // Double the array for seamless infinite loop
+  const carouselItems = [...partners, ...partners, ...partners, ...partners];
 
   return (
     <section id="partners" className="relative overflow-hidden partners-section"
@@ -78,7 +84,7 @@ export default function Partners() {
           </h2>
         </motion.div>
 
-        {/* Liquid glass logo strip */}
+        {/* Liquid glass carousel strip */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -88,19 +94,14 @@ export default function Partners() {
         >
           <div className="liquid-glass-card__specular" />
 
-          <div className="relative z-10 flex items-center justify-center gap-3 md:gap-6 lg:gap-8 flex-wrap"
-            style={{ padding: "clamp(0.75rem, 2vw, 1.5rem)" }}>
-            {partners.map((partner, i) => (
-              <motion.div
-                key={partner.name}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.6,
-                  ease: [0.16, 1, 0.3, 1],
-                  delay: 0.25 + i * 0.1,
-                }}
+          {/* Fade edges */}
+          <div className="partners-carousel-fade partners-carousel-fade--left" />
+          <div className="partners-carousel-fade partners-carousel-fade--right" />
+
+          <div className="partners-carousel-track">
+            {carouselItems.map((partner, i) => (
+              <div
+                key={`${partner.name}-${i}`}
                 className="partner-logo-cell group"
               >
                 <img
@@ -109,7 +110,7 @@ export default function Partners() {
                   className={`partner-logo-img ${partner.rounded ? 'rounded-2xl' : ''}`}
                 />
                 <span className="partner-logo-label">{partner.name}</span>
-              </motion.div>
+              </div>
             ))}
           </div>
         </motion.div>
