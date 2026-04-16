@@ -49,16 +49,21 @@ export default function ContactFormModal({ open, onClose }: ContactFormModalProp
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("[form] submit clicked", { status });
     if (status === "sending") return;
     setStatus("sending");
     setErrorMsg("");
     try {
+      console.log("[form] POST /.netlify/functions/contact", form);
       const res = await fetch("/.netlify/functions/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      if (!res.ok) throw new Error(await res.text());
+      console.log("[form] response", { status: res.status, ok: res.ok });
+      const responseText = await res.text();
+      console.log("[form] response body:", responseText);
+      if (!res.ok) throw new Error(responseText);
       setStatus("success");
       setForm({
         firstName: "",
@@ -70,6 +75,7 @@ export default function ContactFormModal({ open, onClose }: ContactFormModalProp
       });
       setTimeout(onClose, 2000);
     } catch (err) {
+      console.error("[form] submit failed", err);
       setStatus("error");
       setErrorMsg(err instanceof Error ? err.message : "Something went wrong");
     }
