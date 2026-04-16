@@ -8,17 +8,11 @@ export default function Footer() {
           <div className="relative z-10" style={{ padding: "clamp(1.5rem, 3vw, 2.5rem) clamp(1.25rem, 3vw, 2.5rem) clamp(1.25rem, 2vw, 2rem)" }}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 items-start">
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-7 h-7 rounded-full bg-simian flex items-center justify-center
-                    shadow-[0_2px_8px_rgba(27,156,133,0.2)]">
-                    <span className="text-white font-display font-bold text-xs leading-none">
-                      S
-                    </span>
-                  </div>
-                  <span className="font-display font-semibold text-ink text-sm tracking-tight">
-                    Simian Solutions
-                  </span>
-                </div>
+                <img
+                  src="/new-logo-removebg-preview.png"
+                  alt="Simian Solution"
+                  className="h-6 md:h-7 w-auto object-contain mb-3"
+                />
                 <p className="text-steel/70 text-sm leading-relaxed max-w-[30ch]">
                   Performance-driven digital marketing agency.
                 </p>
@@ -44,12 +38,12 @@ export default function Footer() {
                   Connect
                 </span>
                 <a
-                  href="https://simiansolutions.org/"
+                  href="https://simiansolution.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-steel text-sm hover:text-simian transition-colors duration-300"
                 >
-                  simiansolutions.org
+                  simiansolution.com
                 </a>
               </div>
             </div>
@@ -57,7 +51,7 @@ export default function Footer() {
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3"
               style={{ marginTop: "2.5rem", paddingTop: "1.5rem", borderTop: "1px solid rgba(0,0,0,0.04)" }}>
               <p className="text-[0.625rem] text-muted tracking-wide">
-                &copy; 2026 Simian Solutions. All rights reserved.
+                &copy; 2026 Simian Solution. All rights reserved.
               </p>
               <p className="text-[0.625rem] text-muted/60 tracking-wide max-w-[60ch] text-right">
                 Results not guaranteed. Performance depends on multiple factors including

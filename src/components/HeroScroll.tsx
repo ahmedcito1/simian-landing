@@ -4,27 +4,20 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const EXPLODE_FRAMES = 76;
-const FLOAT_FRAMES = 76;
-const TOTAL_FRAMES = EXPLODE_FRAMES + FLOAT_FRAMES - 1;
+const TOTAL_FRAMES = 96;
 
-const explodePaths = Array.from(
-  { length: EXPLODE_FRAMES },
-  (_, i) => `/frames-webp/frame-${String(i + 1).padStart(4, "0")}.webp`
-);
-const floatPaths = Array.from(
-  { length: FLOAT_FRAMES },
-  (_, i) => `/frames-float-webp/frame-${String(i + 1).padStart(4, "0")}.webp`
+const allPaths = Array.from(
+  { length: TOTAL_FRAMES },
+  (_, i) => `/frames-hero-webp/frame-${String(i + 1).padStart(4, "0")}.webp`
 );
 
-const allPaths = [...explodePaths, ...floatPaths.slice(1)];
-
-const explodeEnd = EXPLODE_FRAMES / TOTAL_FRAMES;
+const heroFadeStart = 0.72;
+const heroFadeEnd = 0.84;
 
 const scrollPhrases = [
-  { text: "Strategy that compounds", start: 0.02, end: 0.15 },
-  { text: "Creative that converts", start: 0.18, end: 0.32 },
-  { text: "Growth you can measure", start: 0.35, end: explodeEnd - 0.02 },
+  { text: "Strategy that compounds", start: 0.03, end: 0.22 },
+  { text: "Creative that converts", start: 0.26, end: 0.45 },
+  { text: "Growth you can measure", start: 0.49, end: heroFadeStart - 0.02 },
 ];
 
 export default function HeroScroll() {
@@ -32,7 +25,7 @@ export default function HeroScroll() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
-  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const bitmapsRef = useRef<ImageBitmap[]>([]);
   const [loaded, setLoaded] = useState(false);
   const currentFrameRef = useRef(0);
 
@@ -42,8 +35,8 @@ export default function HeroScroll() {
     if (!canvas || !container) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    const img = imagesRef.current[index];
-    if (!img || !img.complete) return;
+    const bmp = bitmapsRef.current[index];
+    if (!bmp) return;
 
     const dpr = window.devicePixelRatio || 1;
     const rect = container.getBoundingClientRect();
@@ -60,7 +53,7 @@ export default function HeroScroll() {
 
     ctx.clearRect(0, 0, cw, ch);
 
-    const imgRatio = img.naturalWidth / img.naturalHeight;
+    const imgRatio = bmp.width / bmp.height;
     const containerRatio = cw / ch;
     let drawW: number, drawH: number, drawX: number, drawY: number;
 
@@ -76,28 +69,34 @@ export default function HeroScroll() {
       drawY = (ch - drawH) / 2;
     }
 
-    ctx.drawImage(img, drawX, drawY, drawW, drawH);
+    ctx.drawImage(bmp, drawX, drawY, drawW, drawH);
     currentFrameRef.current = index;
   }, []);
 
   useEffect(() => {
-    let loadedCount = 0;
-    const images: HTMLImageElement[] = [];
+    let cancelled = false;
+    const bitmaps: ImageBitmap[] = new Array(allPaths.length);
 
-    allPaths.forEach((src, i) => {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => {
-        loadedCount++;
-        if (loadedCount === allPaths.length) {
-          setLoaded(true);
-          drawFrame(0);
-        }
-      };
-      images[i] = img;
+    Promise.all(
+      allPaths.map((src, i) =>
+        fetch(src)
+          .then((r) => r.blob())
+          .then((blob) => createImageBitmap(blob))
+          .then((bmp) => {
+            bitmaps[i] = bmp;
+          })
+      )
+    ).then(() => {
+      if (cancelled) return;
+      bitmapsRef.current = bitmaps;
+      setLoaded(true);
+      drawFrame(0);
     });
 
-    imagesRef.current = images;
+    return () => {
+      cancelled = true;
+      bitmaps.forEach((b) => b && b.close());
+    };
   }, [drawFrame]);
 
   useEffect(() => {
@@ -158,14 +157,11 @@ export default function HeroScroll() {
         });
 
         if (heroContent) {
-          const heroFadeIn = explodeEnd - 0.02;
-          const heroFullIn = explodeEnd + 0.06;
-
-          if (progress < heroFadeIn) {
+          if (progress < heroFadeStart) {
             heroContent.style.opacity = "0";
             heroContent.style.transform = "translateY(40px)";
-          } else if (progress >= heroFadeIn && progress <= heroFullIn) {
-            const t = (progress - heroFadeIn) / (heroFullIn - heroFadeIn);
+          } else if (progress >= heroFadeStart && progress <= heroFadeEnd) {
+            const t = (progress - heroFadeStart) / (heroFadeEnd - heroFadeStart);
             heroContent.style.opacity = String(t);
             heroContent.style.transform = `translateY(${40 * (1 - t)}px)`;
           } else {
@@ -180,7 +176,7 @@ export default function HeroScroll() {
   }, [loaded, drawFrame]);
 
   return (
-    <section ref={sectionRef} className="relative h-[500vh]">
+    <section ref={sectionRef} className="relative h-[400vh]">
       <div ref={containerRef} className="w-full h-screen overflow-hidden">
         <canvas ref={canvasRef} className="absolute inset-0" />
 

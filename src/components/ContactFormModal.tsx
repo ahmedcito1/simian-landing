@@ -6,6 +6,8 @@ interface ContactFormModalProps {
   onClose: () => void;
 }
 
+type Status = "idle" | "sending" | "success" | "error";
+
 export default function ContactFormModal({ open, onClose }: ContactFormModalProps) {
   const [form, setForm] = useState({
     firstName: "",
@@ -15,6 +17,8 @@ export default function ContactFormModal({ open, onClose }: ContactFormModalProp
     message: "",
     emailList: false,
   });
+  const [status, setStatus] = useState<Status>("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const update = useCallback(
     (field: string, value: string | boolean) =>
@@ -43,10 +47,32 @@ export default function ContactFormModal({ open, onClose }: ContactFormModalProp
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", form);
-    onClose();
+    if (status === "sending") return;
+    setStatus("sending");
+    setErrorMsg("");
+    try {
+      const res = await fetch("/.netlify/functions/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      setStatus("success");
+      setForm({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        message: "",
+        emailList: false,
+      });
+      setTimeout(onClose, 2000);
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Something went wrong");
+    }
   };
 
   return (
@@ -192,23 +218,41 @@ export default function ContactFormModal({ open, onClose }: ContactFormModalProp
                 </label>
 
                 {/* Submit — compact, centered */}
-                <div className="flex justify-center pt-1">
-                  <button type="submit" className="modal-glass-submit group">
-                    Submit
-                    <span className="w-5 h-5 rounded-full bg-white/15 flex items-center justify-center
-                      group-hover:translate-x-0.5 group-hover:-translate-y-[1px]
-                      group-hover:scale-105 transition-transform duration-300">
-                      <svg width="9" height="9" viewBox="0 0 10 10" fill="none">
-                        <path
-                          d="M1 9L9 1M9 1H3M9 1V7"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
+                <div className="flex flex-col items-center gap-2 pt-1">
+                  <button
+                    type="submit"
+                    disabled={status === "sending" || status === "success"}
+                    className="modal-glass-submit group disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {status === "sending"
+                      ? "Sending…"
+                      : status === "success"
+                      ? "Sent ✓"
+                      : "Submit"}
+                    {status !== "success" && (
+                      <span className="w-5 h-5 rounded-full bg-white/15 flex items-center justify-center
+                        group-hover:translate-x-0.5 group-hover:-translate-y-[1px]
+                        group-hover:scale-105 transition-transform duration-300">
+                        <svg width="9" height="9" viewBox="0 0 10 10" fill="none">
+                          <path
+                            d="M1 9L9 1M9 1H3M9 1V7"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </span>
+                    )}
                   </button>
+                  {status === "success" && (
+                    <p className="text-xs text-simian">Thanks — we'll be in touch within 24 hours.</p>
+                  )}
+                  {status === "error" && (
+                    <p className="text-xs text-red-500">
+                      {errorMsg || "Couldn't send. Try again or email us directly."}
+                    </p>
+                  )}
                 </div>
               </form>
             </div>

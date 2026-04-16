@@ -35,7 +35,7 @@ export default function Partners() {
           style={{ marginBottom: "3rem" }}
         >
           <span className="liquid-glass-eyebrow inline-block" style={{ marginBottom: "1.5rem" }}>
-            The CEO of Simian Solutions
+            The CEO of Simian Solution
           </span>
         </motion.div>
 
@@ -57,7 +57,7 @@ export default function Partners() {
             >
               <iframe
                 src="https://www.youtube.com/embed/wvoRT6L36ug"
-                title="Simian Solutions CEO"
+                title="Simian Solution CEO"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="w-full h-full"

@@ -48,7 +48,7 @@ export default function Founder() {
             >
               <iframe
                 src="https://www.youtube.com/embed/U0Uy8zPQ7tE"
-                title="Simian Solutions"
+                title="Simian Solution"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="w-full h-full"
@@ -77,7 +77,7 @@ export default function Founder() {
                   italic leading-[1.3] text-ink mb-8">
                   "A company always starts with one step, yet making sure you're
                   wearing the right shoes and heading towards the right destination
-                  is what Simian Solutions is all about."
+                  is what Simian Solution is all about."
                 </blockquote>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-simian/10 border border-simian-border
@@ -105,14 +105,14 @@ export default function Founder() {
             className="lg:pt-4"
           >
             <p className="text-steel leading-relaxed mb-6 max-w-[55ch]">
-              As a performance-driven digital marketing agency, Simian Solutions
+              As a performance-driven digital marketing agency, Simian Solution
               helps businesses attract qualified leads using SEO-optimized content,
               data-backed marketing strategies, paid advertising, and
               conversion-focused funnels.
             </p>
             <p className="text-steel leading-relaxed max-w-[55ch]">
               By combining SEO, content marketing, and lead generation strategy,
-              Simian Solutions positions brands as authorities in their industry —
+              Simian Solution positions brands as authorities in their industry —
               turning knowledge into measurable growth and consistent inbound leads.
             </p>
 

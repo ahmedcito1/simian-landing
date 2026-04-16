@@ -64,7 +64,7 @@ export default function Navbar({ onOpenForm }: NavbarProps) {
           <div className="liquid-glass-nav__specular" />
 
           {/* ── Content ── */}
-          <div className="relative z-10 flex items-center justify-between px-3 py-2">
+          <div className="relative z-10 flex items-center justify-between pl-7 pr-4 py-4">
             {/* Logo */}
             <a
               href="#"
@@ -74,13 +74,11 @@ export default function Navbar({ onOpenForm }: NavbarProps) {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
             >
-              <div className="liquid-glass-logo">
-                <img
-                  src="/logo.png"
-                  alt="Simian Solutions"
-                  className="relative z-10 w-full h-full object-contain"
-                />
-              </div>
+              <img
+                src="/new-logo-removebg-preview.png"
+                alt="Simian Solution"
+                className="h-7 md:h-8 w-auto object-contain"
+              />
             </a>
 
             {/* Desktop nav links */}
